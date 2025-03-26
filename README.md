@@ -22,17 +22,11 @@ Bookshelf is a web application that allows users to search for books, save them 
 - MongoDB (via Mongoose)
 - Jest (Testing)
 
-### **Deployment & DevOps**
-- GitHub Actions (CI/CD)
-- WSL + VS Code (Development)
-- Husky (Pre-commit hooks for linting and formatting)
-
 ## 📂 Project Structure
 ```
 /bookshelf
 ├── backend/     # Backend (Node.js + Express)
 ├── frontend/    # Frontend (React + Vite + TailwindCSS)
-├── .github/     # CI/CD workflows
 ├── README.md    # Project documentation
 └── .gitignore   # Git ignore rules
 ```
