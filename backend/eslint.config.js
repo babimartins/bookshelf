@@ -22,6 +22,8 @@ export default [
       ...ts.configs.recommended.rules,
       'prettier/prettier': 'error',
       semi: ['error', 'always'],
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
     ignores: ['node_modules', 'dist'],
   },
