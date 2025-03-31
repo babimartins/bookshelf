@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import dotenv from 'dotenv';
-import User from '../types/user';
+import User from '../models/user';
 
 dotenv.config();
 
@@ -16,16 +16,26 @@ passport.use(
       scope: ['profile', 'email'],
     },
     async (accessToken, refreshToken, profile, done) => {
+      const googleId = profile.id;
+      const email = profile.emails?.[0].value;
+      const displayName = profile.displayName;
+
+      if (!email) {
+        console.error('Google profile did not contain an email address.');
+        return done(new Error('Email not provided by Google'), false);
+      }
+
       try {
-        let user = await User.findOne({ googleId: profile.id });
+        let user = await User.findOne({ googleId });
 
         if (!user) {
           user = await User.create({
-            googleId: profile.id,
-            displayName: profile.displayName,
-            email: profile.emails?.[0].value,
+            googleId,
+            displayName,
+            email,
           });
         }
+
         return done(null, user);
       } catch (err: any) {
         return done(err, false);

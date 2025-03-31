@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response, Router } from 'express';
 import passport from 'passport'; // Importe a instância configurada do seu arquivo passport.setup.ts
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { IUser } from '../types/user';
+import { IUser } from '../models/user';
 
 dotenv.config(); // Garante que as variáveis de ambiente sejam carregadas
 
