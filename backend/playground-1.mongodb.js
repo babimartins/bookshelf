@@ -10,7 +10,7 @@
 // https://www.mongodb.com/docs/mongodb-vscode/playgrounds/
 
 // Select the database to use.
-use('mongodbVSCodePlaygroundDB')
+use('mongodbVSCodePlaygroundDB');
 
 // Insert a few documents into the sales collection.
 db.getCollection('sales').insertMany([
@@ -62,7 +62,7 @@ db.getCollection('sales').insertMany([
     quantity: 5,
     date: new Date('2016-02-06T20:20:13Z'),
   },
-])
+]);
 
 // Run a find command to view items sold on April 4th, 2014.
 const salesOnApril4th = db
@@ -70,10 +70,10 @@ const salesOnApril4th = db
   .find({
     date: { $gte: new Date('2014-04-04'), $lt: new Date('2014-04-05') },
   })
-  .count()
+  .count();
 
 // Print a message to the output window.
-console.log(`${salesOnApril4th} sales occurred in 2014.`)
+console.log(`${salesOnApril4th} sales occurred in 2014.`);
 
 // Here we run an aggregation and open a cursor to the results.
 // Use '.toArray()' to exhaust the cursor to return the whole result set.
@@ -92,4 +92,4 @@ db.getCollection('sales').aggregate([
       totalSaleAmount: { $sum: { $multiply: ['$price', '$quantity'] } },
     },
   },
-])
+]);
