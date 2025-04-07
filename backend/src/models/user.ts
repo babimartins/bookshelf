@@ -1,7 +1,15 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IUser extends mongoose.Document {
+export interface IUser extends Document {
   googleId: string;
+  displayName: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IUserResponse {
+  id: string;
   displayName: string;
   email: string;
   createdAt: Date;
@@ -18,7 +26,7 @@ const userSchema = new Schema<IUser>(
     },
     email: {
       type: String,
-      required: true,
+      required: [true, 'Email is required'],
       unique: true,
       index: true,
       lowercase: true,
@@ -27,18 +35,34 @@ const userSchema = new Schema<IUser>(
     displayName: {
       type: String,
       trim: true,
+      maxlength: [100, 'Display name cannot be more than 100 characters'],
     },
   },
   {
     timestamps: true,
     toJSON: {
       transform: (doc, ret) => {
-        ret.id = ret._id;
+        const response: Partial<IUserResponse> = {};
+
+        response.id = ret._id?.toString();
+        response.email = ret.email;
+        response.displayName = ret.displayName;
+        response.createdAt = ret.createdAt;
+        response.updatedAt = ret.updatedAt;
+
         delete ret._id;
         delete ret.__v;
-        delete ret.password;
         delete ret.googleId;
-        return ret;
+
+        const finalResponse: IUserResponse = {
+          id: doc._id as string,
+          email: doc.email,
+          displayName: doc.displayName,
+          createdAt: doc.createdAt,
+          updatedAt: doc.updatedAt,
+        };
+
+        return finalResponse;
       },
     },
   },
