@@ -1,16 +1,17 @@
-import express, { NextFunction, Request, Response, Router } from 'express';
-import passport from 'passport'; // Importe a instância configurada do seu arquivo passport.setup.ts
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { IUser } from '../models/user';
+import express, { NextFunction, Request, Response, Router } from 'express';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
 
-dotenv.config(); // Garante que as variáveis de ambiente sejam carregadas
+import { IUser } from '#models/user';
+
+dotenv.config();
 
 const router: Router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h'; // Default 1 hora
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'; // URL do seu frontend
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 if (!JWT_SECRET) {
   console.error('FATAL ERROR: JWT_SECRET is not defined.');
@@ -18,7 +19,6 @@ if (!JWT_SECRET) {
 }
 
 // --- Rota para iniciar o fluxo de autenticação do Google ---
-// GET /api/auth/google
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -28,7 +28,6 @@ router.get(
 );
 
 // --- Rota de Callback do Google ---
-// GET /api/auth/google/callback
 router.get(
   '/google/callback',
   passport.authenticate('google', {
@@ -46,7 +45,7 @@ router.get(
     const user = req.user as IUser;
 
     const payload = {
-      id: user.id || user._id,
+      id: user.id || (user as any)._id,
       email: user.email,
     };
 
@@ -64,7 +63,6 @@ router.get(
 );
 
 // --- Rota de exemplo para obter dados do usuário logado (protegida por JWT) ---
-// GET /api/auth/me
 router.get(
   '/me',
   passport.authenticate('jwt', { session: false }),

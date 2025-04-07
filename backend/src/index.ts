@@ -2,8 +2,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import passport from 'passport';
-import connectDB from './config/db.ts';
-import router from './routes/auth.ts';
+import connectDB from '#config/db';
+import router from '#routes/auth';
 
 dotenv.config();
 
